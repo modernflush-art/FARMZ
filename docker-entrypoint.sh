@@ -35,18 +35,6 @@ create_drupal_settings() {
         
         echo "Copying default.settings.php to settings.php..."
         cp /var/www/html/sites/default/default.settings.php /var/www/html/sites/default/settings.php
-<?php
-
-/**
- * @file
- * Drupal site-specific configuration file.
- */
-
-// Database configuration will be added by the entrypoint script
-EOF
-        fi
-        
-        cp /var/www/html/sites/default/default.settings.php /var/www/html/sites/default/settings.php
         
         # Add database configuration
         cat >> /var/www/html/sites/default/settings.php << EOF
