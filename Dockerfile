@@ -59,7 +59,14 @@ RUN composer install --no-dev --optimize-autoloader && \
     echo "=== Checking for web directory ===" && \
     ls -la /var/www/html/web/ 2>/dev/null || echo "Web directory not found" && \
     echo "=== Checking for core directory ===" && \
-    ls -la /var/www/html/web/core/ 2>/dev/null || echo "Core directory not found"
+    ls -la /var/www/html/web/core/ 2>/dev/null || echo "Core directory not found" && \
+    echo "=== Copying core files if missing ===" && \
+    if [ ! -d /var/www/html/web/core ]; then \
+        cp -r /var/www/html/vendor/drupal/core /var/www/html/web/ && \
+        echo "Core files copied successfully"; \
+    else \
+        echo "Core directory already exists"; \
+    fi
 
 # Copy only necessary project files (not vendor or web directories)
 COPY docker-entrypoint.sh /usr/local/bin/
