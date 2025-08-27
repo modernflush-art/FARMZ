@@ -6,10 +6,10 @@ RUN apt-get update && \
 
 RUN a2enmod rewrite
 
-# Configure Apache - Add ServerName at the top of main config
-RUN sed -i '1i ServerName localhost' /etc/apache2/apache2.conf && \
-    echo "ServerName localhost" >> /etc/apache2/conf-available/servername.conf && \
-    a2enconf servername
+# Configure Apache - Create proper ServerName configuration
+RUN echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf && \
+    a2enconf servername && \
+    echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 WORKDIR /var/www/html
 
