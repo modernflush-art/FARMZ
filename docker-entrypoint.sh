@@ -90,7 +90,7 @@ install_drupal() {
     # Check if Drupal is already installed by looking for users table
     if [ ! -f /var/www/html/web/core/scripts/drupal ]; then
         echo "Drupal core scripts not found. Skipping automatic installation."
-        echo "Please install Drupal manually via web interface."
+        echo "Please install Drupal manually via web interface at /install.php"
         return 1
     fi
     
