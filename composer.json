@@ -2,14 +2,14 @@
   "name": "farmz/drupal-farmos",
   "type": "project",
   "description": "Drupal site with FarmOS modules, hosted on Railway via GitHub",
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "repositories": [
     { "type": "composer", "url": "https://packages.drupal.org/8" }
   ],
   "require": {
-    "drupal/core-recommended": "^9.4",
-    "drupal/core-project-message": "^9.0",
-    "farmOS/farmos": "dev-main"
+    "drupal/core-recommended": "^10.0",
+    "drupal/core-project-message": "^10.0",
+    "farmos/farmos": "^4.0"
   },
   "extra": {
     "installer-paths": {
