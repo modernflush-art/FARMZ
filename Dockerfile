@@ -59,7 +59,8 @@ RUN composer install --no-dev --optimize-autoloader && \
     echo "=== Checking for core directory ===" && \
     ls -la /var/www/html/core/ 2>/dev/null || echo "Core directory not found"
 
-# Copy only necessary project files (not vendor or web directories)
+# Copy core directory and other necessary project files
+COPY core/ /var/www/html/core/
 COPY docker-entrypoint.sh /usr/local/bin/
 COPY index.php /var/www/html/
 COPY test.php /var/www/html/
