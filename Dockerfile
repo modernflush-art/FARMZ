@@ -44,6 +44,9 @@ RUN echo '<VirtualHost *:80>\n    ServerName localhost\n    DocumentRoot /var/ww
 
 WORKDIR /var/www/html
 
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 # Copy composer files first for better caching
 COPY composer.json composer.lock ./
 
