@@ -23,6 +23,22 @@ wait_for_db() {
 create_drupal_settings() {
     if [ ! -f /var/www/html/web/sites/default/settings.php ]; then
         echo "Creating Drupal settings.php..."
+        
+        # Check if default.settings.php exists, if not create a basic one
+        if [ ! -f /var/www/html/web/sites/default/default.settings.php ]; then
+            echo "Creating basic default.settings.php..."
+            cat > /var/www/html/web/sites/default/default.settings.php << 'EOF'
+<?php
+
+/**
+ * @file
+ * Drupal site-specific configuration file.
+ */
+
+// Database configuration will be added by the entrypoint script
+EOF
+        fi
+        
         cp /var/www/html/web/sites/default/default.settings.php /var/www/html/web/sites/default/settings.php
         
         # Add database configuration
@@ -92,6 +108,12 @@ echo "Starting FarmOS container..."
 
 # Wait for database
 wait_for_db
+
+# Ensure web directory exists
+if [ ! -d /var/www/html/web ]; then
+    echo "Error: /var/www/html/web directory not found. Composer install may have failed."
+    exit 1
+fi
 
 # Create Drupal settings
 create_drupal_settings
