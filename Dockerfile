@@ -7,7 +7,9 @@ RUN apt-get update && \
 RUN a2enmod rewrite
 
 # Configure Apache
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
+    echo "ServerName localhost" >> /etc/apache2/conf-available/servername.conf && \
+    a2enconf servername
 
 WORKDIR /var/www/html
 
