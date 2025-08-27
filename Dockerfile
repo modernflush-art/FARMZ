@@ -6,10 +6,9 @@ RUN apt-get update && \
 
 RUN a2enmod rewrite
 
-# Configure Apache - Create proper ServerName configuration
-RUN echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf && \
-    a2enconf servername && \
-    echo "ServerName localhost" >> /etc/apache2/apache2.conf
+# Configure Apache - Set ServerName in virtual host
+RUN echo '<VirtualHost *:80>\n    ServerName localhost\n    DocumentRoot /var/www/html/web\n    <Directory /var/www/html/web>\n        AllowOverride All\n        Require all granted\n    </Directory>\n</VirtualHost>' > /etc/apache2/sites-available/000-default.conf && \
+    a2ensite 000-default.conf
 
 WORKDIR /var/www/html
 
