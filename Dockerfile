@@ -74,9 +74,8 @@ COPY index.php /var/www/html/
 COPY .gitignore /var/www/html/
 COPY README.md /var/www/html/
 
-# Update Apache configuration - use absolute path to avoid double substitution
-RUN sed -ri -e 's!/var/www/html!/var/www/html/web!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!/var/www/html/web!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+# Apache configuration is already set correctly in the virtual host above
+# No need for sed substitutions that cause double paths
 
 # Create Drupal settings directory and set permissions
 RUN mkdir -p /var/www/html/web/sites/default/files && \
