@@ -7,14 +7,20 @@
     { "type": "composer", "url": "https://packages.drupal.org/8" }
   ],
   "require": {
-    "drupal/core-recommended": "^10.0",
-    "drupal/core-project-message": "^10.0",
+    "drupal/core-recommended": "^11.0",
+    "drupal/core-project-message": "^11.0",
     "farmos/farmos": "^4.0"
   },
   "extra": {
     "installer-paths": {
       "web/core": ["type:drupal-core"],
       "web/modules/contrib/{$name}": "type:drupal-module"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "drupal/core-project-message": true,
+      "cweagans/composer-patches": true
     }
   }
 }
