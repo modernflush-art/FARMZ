@@ -5,9 +5,9 @@
  */
 
 // Check if Drupal is installed
-if (file_exists(__DIR__ . '/core/includes/bootstrap.inc')) {
+if (file_exists(__DIR__ . '/web/core/includes/bootstrap.inc')) {
     // Drupal is available, redirect to it
-    header('Location: /core/install.php');
+    header('Location: /web/core/install.php');
     exit;
 } else {
     // Drupal not available, show status

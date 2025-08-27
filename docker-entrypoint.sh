@@ -21,13 +21,13 @@ wait_for_db() {
 
 # Function to create Drupal settings
 create_drupal_settings() {
-    if [ ! -f /var/www/html/sites/default/settings.php ]; then
+    if [ ! -f /var/www/html/web/sites/default/settings.php ]; then
         echo "Creating Drupal settings.php..."
         
         # Check if default.settings.php exists, if not create a basic one
-        if [ ! -f /var/www/html/sites/default/default.settings.php ]; then
+        if [ ! -f /var/www/html/web/sites/default/default.settings.php ]; then
             echo "Creating basic default.settings.php..."
-            cat > /var/www/html/sites/default/default.settings.php << 'EOF'
+            cat > /var/www/html/web/sites/default/default.settings.php << 'EOF'
 <?php
 
 /**
@@ -39,7 +39,7 @@ create_drupal_settings() {
 EOF
         fi
         
-        cp /var/www/html/sites/default/default.settings.php /var/www/html/sites/default/settings.php
+        cp /var/www/html/web/sites/default/default.settings.php /var/www/html/web/sites/default/settings.php
         
         # Add database configuration
         cat >> /var/www/html/web/sites/default/settings.php << EOF
@@ -82,23 +82,23 @@ EOF
 
 # Function to install Drupal if not already installed
 install_drupal() {
-    if [ ! -f /var/www/html/sites/default/settings.php ]; then
+    if [ ! -f /var/www/html/web/sites/default/settings.php ]; then
         echo "Drupal not installed. Please configure settings.php first."
         return 1
     fi
     
     # Check if Drupal is already installed by looking for users table
-    if [ ! -f /var/www/html/core/scripts/drupal ]; then
+    if [ ! -f /var/www/html/web/core/scripts/drupal ]; then
         echo "Drupal core scripts not found. Skipping automatic installation."
         echo "Please install Drupal manually via web interface at /install.php"
-        echo "Or check if Drupal core is properly installed in /var/www/html/core/"
+        echo "Or check if Drupal core is properly installed in /var/www/html/web/core/"
         return 1
     fi
     
     # Check if Drupal is already installed by looking for users table
-    if ! php /var/www/html/core/scripts/drupal database:status 2>/dev/null | grep -q "Connected"; then
+    if ! php /var/www/html/web/core/scripts/drupal database:status 2>/dev/null | grep -q "Connected"; then
         echo "Installing Drupal..."
-        php /var/www/html/core/scripts/drupal site:install farmos \
+        php /var/www/html/web/core/scripts/drupal site:install farmos \
             --db-url="$DATABASE_URL" \
             --account-name=admin \
             --account-pass=admin123 \
@@ -118,8 +118,8 @@ echo "Starting FarmOS container..."
 wait_for_db
 
 # Ensure Drupal directory exists
-if [ ! -d /var/www/html/core ]; then
-    echo "Error: /var/www/html/core directory not found. Composer install may have failed."
+if [ ! -d /var/www/html/web/core ]; then
+    echo "Error: /var/www/html/web/core directory not found. Composer install may have failed."
     echo "Container will continue running for debugging..."
 else
     echo "Drupal core directory found"
@@ -128,10 +128,18 @@ else
     echo "Contents of /var/www/html:"
     ls -la /var/www/html/ || echo "Cannot list Drupal directory"
 
+    # Debug: Check if web directory exists
+    if [ -d /var/www/html/web ]; then
+        echo "Web directory found"
+        ls -la /var/www/html/web/ || echo "Cannot list web directory"
+    else
+        echo "Web directory not found"
+    fi
+
     # Debug: Check if core directory exists
-    if [ -d /var/www/html/core ]; then
+    if [ -d /var/www/html/web/core ]; then
         echo "Drupal core directory found"
-        ls -la /var/www/html/core/ || echo "Cannot list core directory"
+        ls -la /var/www/html/web/core/ || echo "Cannot list core directory"
     else
         echo "Drupal core directory not found"
     fi
@@ -143,7 +151,7 @@ else
     install_drupal
 
     # Set proper permissions
-    chown -R www-data:www-data /var/www/html/sites/default/files
+    chown -R www-data:www-data /var/www/html/web/sites/default/files
 fi
 
 echo "FarmOS container ready!"
