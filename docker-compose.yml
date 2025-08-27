@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  farmos:
+    image: farmos/farmos:latest
+    ports:
+      - "8080:80"
+      - "8081:80"
+    environment:
+      DATABASE_URL: postgresql://postgres:SIJqyJWaqYNIPzNzwZVMrNYDGLSuiebc@centerbeam.proxy.rlwy.net:21258/railway
