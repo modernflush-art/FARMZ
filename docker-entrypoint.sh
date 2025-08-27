@@ -91,6 +91,7 @@ install_drupal() {
     if [ ! -f /var/www/html/web/core/scripts/drupal ]; then
         echo "Drupal core scripts not found. Skipping automatic installation."
         echo "Please install Drupal manually via web interface at /install.php"
+        echo "Or check if Drupal core is properly installed in /var/www/html/web/core/"
         return 1
     fi
     

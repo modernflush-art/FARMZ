@@ -51,8 +51,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY composer.json composer.lock ./
 
 # Install Composer dependencies
-RUN composer install --no-dev --optimize-autoloader && \
-    composer drupal:scaffold --yes
+RUN composer install --no-dev --optimize-autoloader
 
 # Copy project sources
 COPY . /var/www/html
