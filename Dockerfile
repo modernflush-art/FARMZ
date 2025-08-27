@@ -3,9 +3,35 @@ FROM php:8.1-apache
 # Set ServerName environment variable
 ENV APACHE_SERVER_NAME=localhost
 
+# Install system dependencies and PHP extensions required for Drupal/FarmOS
 RUN apt-get update && \
-    apt-get install -y git unzip zip libzip-dev && \
-    docker-php-ext-install pdo pdo_mysql pdo_pgsql
+    apt-get install -y \
+    git \
+    unzip \
+    zip \
+    libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libxml2-dev \
+    libonig-dev \
+    libgd-dev \
+    libwebp-dev \
+    libicu-dev \
+    libpq-dev \
+    netcat-traditional \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install -j$(nproc) \
+    pdo \
+    pdo_mysql \
+    pdo_pgsql \
+    gd \
+    mbstring \
+    xml \
+    intl \
+    zip \
+    opcache \
+    && docker-php-ext-enable opcache
 
 # Configure Apache ServerName globally before enabling modules
 RUN echo "ServerName ${APACHE_SERVER_NAME}" >> /etc/apache2/apache2.conf
@@ -18,6 +44,12 @@ RUN echo '<VirtualHost *:80>\n    ServerName localhost\n    DocumentRoot /var/ww
 
 WORKDIR /var/www/html
 
+# Copy composer files first for better caching
+COPY composer.json composer.lock ./
+
+# Install Composer dependencies
+RUN composer install --no-dev --optimize-autoloader
+
 # Copy project sources
 COPY . /var/www/html
 
@@ -28,8 +60,17 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/web
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Permissions
-RUN chown -R www-data:www-data /var/www/html \
- && chmod -R 755 /var/www/html
+# Create Drupal settings directory and set permissions
+RUN mkdir -p /var/www/html/web/sites/default/files && \
+    chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html && \
+    chmod -R 775 /var/www/html/web/sites/default/files
+
+# Create a startup script to handle Drupal installation
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 80
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["apache2-foreground"]
