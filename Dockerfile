@@ -62,6 +62,7 @@ RUN composer install --no-dev --optimize-autoloader && \
 # Copy only necessary project files (not vendor or web directories)
 COPY docker-entrypoint.sh /usr/local/bin/
 COPY index.php /var/www/html/
+COPY test.php /var/www/html/
 COPY .gitignore /var/www/html/
 COPY README.md /var/www/html/
 

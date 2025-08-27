@@ -21,13 +21,20 @@ wait_for_db() {
 
 # Function to create Drupal settings
 create_drupal_settings() {
+    echo "Checking for settings.php..."
     if [ ! -f /var/www/html/sites/default/settings.php ]; then
         echo "Creating Drupal settings.php..."
         
-        # Check if default.settings.php exists, if not create a basic one
+        # Check if default.settings.php exists
         if [ ! -f /var/www/html/sites/default/default.settings.php ]; then
-            echo "Creating basic default.settings.php..."
-            cat > /var/www/html/sites/default/default.settings.php << 'EOF'
+            echo "ERROR: default.settings.php not found!"
+            echo "Contents of sites/default/:"
+            ls -la /var/www/html/sites/default/ || echo "Cannot list directory"
+            return 1
+        fi
+        
+        echo "Copying default.settings.php to settings.php..."
+        cp /var/www/html/sites/default/default.settings.php /var/www/html/sites/default/settings.php
 <?php
 
 /**
@@ -39,10 +46,10 @@ create_drupal_settings() {
 EOF
         fi
         
-        cp /var/www/html/web/sites/default/default.settings.php /var/www/html/web/sites/default/settings.php
+        cp /var/www/html/sites/default/default.settings.php /var/www/html/sites/default/settings.php
         
         # Add database configuration
-        cat >> /var/www/html/web/sites/default/settings.php << EOF
+        cat >> /var/www/html/sites/default/settings.php << EOF
 
 // Database configuration from environment
 \$databases['default']['default'] = [
@@ -108,6 +115,14 @@ install_drupal() {
 
 # Main execution
 echo "Starting FarmOS container..."
+
+# Debug: Show current directory structure
+echo "=== Debug: Current directory structure ==="
+echo "Contents of /var/www/html:"
+ls -la /var/www/html/ || echo "Cannot list directory"
+echo "Contents of /var/www/html/sites/default:"
+ls -la /var/www/html/sites/default/ || echo "Cannot list sites/default directory"
+echo "=== End Debug ==="
 
 # Wait for database
 wait_for_db
