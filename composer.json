@@ -19,12 +19,18 @@
       "themes/contrib/{$name}": "type:drupal-theme",
       "libraries/{$name}": "type:drupal-library",
       "profiles/contrib/{$name}": "type:drupal-profile"
+    },
+    "drupal-scaffold": {
+      "locations": {
+        "web-root": "."
+      }
     }
   },
   "config": {
     "allow-plugins": {
       "drupal/core-project-message": true,
-      "cweagans/composer-patches": true
+      "cweagans/composer-patches": true,
+      "drupal/core-composer-scaffold": true
     }
   }
 }

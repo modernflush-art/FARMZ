@@ -52,8 +52,14 @@ COPY composer.json composer.lock ./
 
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader && \
+    composer drupal:scaffold --yes && \
+    echo "=== Composer install completed ===" && \
+    echo "=== Contents of /var/www/html ===" && \
     ls -la /var/www/html/ && \
-    echo "Composer install completed"
+    echo "=== Checking for core directory ===" && \
+    ls -la /var/www/html/core/ 2>/dev/null || echo "Core directory not found" && \
+    echo "=== Checking for modules directory ===" && \
+    ls -la /var/www/html/modules/ 2>/dev/null || echo "Modules directory not found"
 
 # Copy only necessary project files (not vendor or web directories)
 COPY docker-entrypoint.sh /usr/local/bin/
