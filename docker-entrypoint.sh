@@ -122,6 +122,18 @@ if [ ! -d /var/www/html/web ]; then
     exit 1
 fi
 
+# Debug: List contents of web directory
+echo "Contents of /var/www/html/web:"
+ls -la /var/www/html/web/ || echo "Cannot list web directory"
+
+# Debug: Check if core directory exists
+if [ -d /var/www/html/web/core ]; then
+    echo "Drupal core directory found"
+    ls -la /var/www/html/web/core/ || echo "Cannot list core directory"
+else
+    echo "Drupal core directory not found"
+fi
+
 # Create Drupal settings
 create_drupal_settings
 
