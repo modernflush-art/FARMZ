@@ -5,7 +5,6 @@ sites/*/tmp/
 
 # Composer
 vendor/
-composer.lock
 
 # Environment files
 .env
