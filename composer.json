@@ -10,6 +10,7 @@
     "php": ">=8.4",
     "drupal/core-recommended": "^11.0",
     "drupal/core-project-message": "^11.0",
+    "drupal/core-composer-scaffold": "^11.0",
     "farmos/farmos": "^4.0"
   },
   "extra": {

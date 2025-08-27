@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "08b9ee8258098e0fe36b87674840322d",
+    "content-hash": "3c21ee7e5155c1a5710bdba5a649b5fa",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1415,6 +1415,57 @@
                 "source": "https://github.com/drupal/core/tree/11.2.2"
             },
             "time": "2025-06-26T13:56:54+00:00"
+        },
+        {
+            "name": "drupal/core-composer-scaffold",
+            "version": "11.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/drupal/core-composer-scaffold.git",
+                "reference": "abe1afa1042c91f6110712e7a4e6fe4a75788d4b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/abe1afa1042c91f6110712e7a4e6fe4a75788d4b",
+                "reference": "abe1afa1042c91f6110712e7a4e6fe4a75788d4b",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^2",
+                "php": ">=7.3.0"
+            },
+            "conflict": {
+                "drupal-composer/drupal-scaffold": "*"
+            },
+            "require-dev": {
+                "composer/composer": "^1.8@stable"
+            },
+            "default-branch": true,
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Drupal\\Composer\\Plugin\\Scaffold\\Plugin",
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Drupal\\Composer\\Plugin\\Scaffold\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "A flexible Composer project scaffold builder.",
+            "homepage": "https://www.drupal.org/project/drupal",
+            "keywords": [
+                "drupal"
+            ],
+            "support": {
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/11.x"
+            },
+            "time": "2025-07-10T16:55:51+00:00"
         },
         {
             "name": "drupal/core-project-message",
