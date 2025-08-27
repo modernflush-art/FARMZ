@@ -55,8 +55,11 @@ RUN composer install --no-dev --optimize-autoloader && \
     ls -la /var/www/html/ && \
     echo "Composer install completed"
 
-# Copy project sources
-COPY . /var/www/html
+# Copy only necessary project files (not vendor or web directories)
+COPY docker-entrypoint.sh /usr/local/bin/
+COPY index.php /var/www/html/
+COPY .gitignore /var/www/html/
+COPY README.md /var/www/html/
 
 # Set document root for Drupal
 ENV APACHE_DOCUMENT_ROOT=/var/www/html
@@ -71,8 +74,7 @@ RUN mkdir -p /var/www/html/sites/default/files && \
     chmod -R 755 /var/www/html && \
     chmod -R 775 /var/www/html/sites/default/files
 
-# Create a startup script to handle Drupal installation
-COPY docker-entrypoint.sh /usr/local/bin/
+# Set permissions for entrypoint script
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 80

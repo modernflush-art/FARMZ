@@ -5,6 +5,7 @@ sites/*/tmp/
 
 # Composer
 vendor/
+web/
 
 # Environment files
 .env
