@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:8.4-apache
 
 # Set ServerName environment variable
 ENV APACHE_SERVER_NAME=localhost
