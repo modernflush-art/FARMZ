@@ -2,7 +2,7 @@ version: '3'
 
 services:
   farmos:
-    image: farmos/farmos:latest
+    build: .
     ports:
       - "8080:80"
       - "8081:80"

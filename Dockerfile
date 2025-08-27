@@ -51,7 +51,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY composer.json composer.lock ./
 
 # Install Composer dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader && \
+    ls -la /var/www/html/web/ && \
+    echo "Composer install completed"
 
 # Copy project sources
 COPY . /var/www/html
