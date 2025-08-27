@@ -96,16 +96,11 @@ install_drupal() {
     fi
     
     # Check if Drupal is already installed by looking for users table
+    echo "Checking if Drupal is already installed..."
     if ! php /var/www/html/web/core/scripts/drupal database:status 2>/dev/null | grep -q "Connected"; then
-        echo "Installing Drupal..."
-        php /var/www/html/web/core/scripts/drupal site:install farmos \
-            --db-url="$DATABASE_URL" \
-            --account-name=admin \
-            --account-pass=admin123 \
-            --account-mail=admin@example.com \
-            --site-name="FarmOS" \
-            --site-mail=admin@example.com \
-            --yes
+        echo "Drupal not installed. Please install manually via web interface at /install.php"
+        echo "Database connection available. You can proceed with manual installation."
+        return 0
     else
         echo "Drupal already installed."
     fi
@@ -121,6 +116,8 @@ wait_for_db
 if [ ! -d /var/www/html/web/core ]; then
     echo "Error: /var/www/html/web/core directory not found. Composer install may have failed."
     echo "Container will continue running for debugging..."
+    echo "Contents of /var/www/html:"
+    ls -la /var/www/html/ || echo "Cannot list Drupal directory"
 else
     echo "Drupal core directory found"
     
