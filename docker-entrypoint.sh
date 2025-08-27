@@ -88,6 +88,13 @@ install_drupal() {
     fi
     
     # Check if Drupal is already installed by looking for users table
+    if [ ! -f /var/www/html/web/core/scripts/drupal ]; then
+        echo "Drupal core scripts not found. Skipping automatic installation."
+        echo "Please install Drupal manually via web interface."
+        return 1
+    fi
+    
+    # Check if Drupal is already installed by looking for users table
     if ! php /var/www/html/web/core/scripts/drupal database:status 2>/dev/null | grep -q "Connected"; then
         echo "Installing Drupal..."
         php /var/www/html/web/core/scripts/drupal site:install farmos \
