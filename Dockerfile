@@ -39,7 +39,7 @@ RUN echo "ServerName ${APACHE_SERVER_NAME}" >> /etc/apache2/apache2.conf
 RUN a2enmod rewrite
 
 # Configure Apache - Set ServerName in virtual host
-RUN echo '<VirtualHost *:80>\n    ServerName localhost\n    DocumentRoot /var/www/html/web\n    <Directory /var/www/html/web>\n        AllowOverride All\n        Require all granted\n    </Directory>\n</VirtualHost>' > /etc/apache2/sites-available/000-default.conf && \
+RUN echo '<VirtualHost *:80>\n    ServerName localhost\n    DocumentRoot /var/www/html\n    <Directory /var/www/html>\n        AllowOverride All\n        Require all granted\n    </Directory>\n</VirtualHost>' > /etc/apache2/sites-available/000-default.conf && \
     a2ensite 000-default.conf
 
 WORKDIR /var/www/html
@@ -56,17 +56,8 @@ RUN composer install --no-dev --optimize-autoloader && \
     echo "=== Composer install completed ===" && \
     echo "=== Contents of /var/www/html ===" && \
     ls -la /var/www/html/ && \
-    echo "=== Checking for web directory ===" && \
-    ls -la /var/www/html/web/ 2>/dev/null || echo "Web directory not found" && \
     echo "=== Checking for core directory ===" && \
-    ls -la /var/www/html/web/core/ 2>/dev/null || echo "Core directory not found" && \
-    echo "=== Copying core files if missing ===" && \
-    if [ ! -d /var/www/html/web/core ]; then \
-        cp -r /var/www/html/vendor/drupal/core /var/www/html/web/ && \
-        echo "Core files copied successfully"; \
-    else \
-        echo "Core directory already exists"; \
-    fi
+    ls -la /var/www/html/core/ 2>/dev/null || echo "Core directory not found"
 
 # Copy only necessary project files (not vendor or web directories)
 COPY docker-entrypoint.sh /usr/local/bin/
@@ -78,10 +69,10 @@ COPY README.md /var/www/html/
 # No need for sed substitutions that cause double paths
 
 # Create Drupal settings directory and set permissions
-RUN mkdir -p /var/www/html/web/sites/default/files && \
+RUN mkdir -p /var/www/html/sites/default/files && \
     chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html && \
-    chmod -R 775 /var/www/html/web/sites/default/files
+    chmod -R 775 /var/www/html/sites/default/files
 
 # Set permissions for entrypoint script
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh

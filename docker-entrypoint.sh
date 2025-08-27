@@ -21,13 +21,13 @@ wait_for_db() {
 
 # Function to create Drupal settings
 create_drupal_settings() {
-    if [ ! -f /var/www/html/web/sites/default/settings.php ]; then
+    if [ ! -f /var/www/html/sites/default/settings.php ]; then
         echo "Creating Drupal settings.php..."
         
         # Check if default.settings.php exists, if not create a basic one
-        if [ ! -f /var/www/html/web/sites/default/default.settings.php ]; then
+        if [ ! -f /var/www/html/sites/default/default.settings.php ]; then
             echo "Creating basic default.settings.php..."
-            cat > /var/www/html/web/sites/default/default.settings.php << 'EOF'
+            cat > /var/www/html/sites/default/default.settings.php << 'EOF'
 <?php
 
 /**
@@ -75,29 +75,29 @@ EOF
 \$settings['cache']['bins']['page'] = 'cache.backend.null';
 EOF
         
-        chown www-data:www-data /var/www/html/web/sites/default/settings.php
-        chmod 644 /var/www/html/web/sites/default/settings.php
+        chown www-data:www-data /var/www/html/sites/default/settings.php
+        chmod 644 /var/www/html/sites/default/settings.php
     fi
 }
 
 # Function to install Drupal if not already installed
 install_drupal() {
-    if [ ! -f /var/www/html/web/sites/default/settings.php ]; then
+    if [ ! -f /var/www/html/sites/default/settings.php ]; then
         echo "Drupal not installed. Please configure settings.php first."
         return 1
     fi
     
     # Check if Drupal is already installed by looking for users table
-    if [ ! -f /var/www/html/web/core/scripts/drupal ]; then
+    if [ ! -f /var/www/html/core/scripts/drupal ]; then
         echo "Drupal core scripts not found. Skipping automatic installation."
         echo "Please install Drupal manually via web interface at /install.php"
-        echo "Or check if Drupal core is properly installed in /var/www/html/web/core/"
+        echo "Or check if Drupal core is properly installed in /var/www/html/core/"
         return 1
     fi
     
     # Check if Drupal is already installed by looking for users table
     echo "Checking if Drupal is already installed..."
-    if ! php /var/www/html/web/core/scripts/drupal database:status 2>/dev/null | grep -q "Connected"; then
+    if ! php /var/www/html/core/scripts/drupal database:status 2>/dev/null | grep -q "Connected"; then
         echo "Drupal not installed. Please install manually via web interface at /install.php"
         echo "Database connection available. You can proceed with manual installation."
         return 0
@@ -113,11 +113,11 @@ echo "Starting FarmOS container..."
 wait_for_db
 
 # Create Drupal settings if core exists
-if [ -d /var/www/html/web/core ]; then
+if [ -d /var/www/html/core ]; then
     echo "Drupal core directory found"
     create_drupal_settings
     install_drupal
-    chown -R www-data:www-data /var/www/html/web/sites/default/files
+    chown -R www-data:www-data /var/www/html/sites/default/files
 else
     echo "Drupal core directory not found, but continuing..."
     echo "Contents of /var/www/html:"

@@ -34,3 +34,13 @@ Thumbs.db
 *.log
 /.editorconfig
 /.gitattributes
+/.csslintrc
+/.eslintignore
+/.eslintrc.json
+/.ht.router.php
+/.htaccess
+/INSTALL.txt
+/autoload.php
+/example.gitignore
+/robots.txt
+/update.php
