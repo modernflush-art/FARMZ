@@ -1,8 +1,14 @@
 FROM php:8.1-apache
 
+# Set ServerName environment variable
+ENV APACHE_SERVER_NAME=localhost
+
 RUN apt-get update && \
     apt-get install -y git unzip zip libzip-dev && \
     docker-php-ext-install pdo pdo_mysql pdo_pgsql
+
+# Configure Apache ServerName globally before enabling modules
+RUN echo "ServerName ${APACHE_SERVER_NAME}" >> /etc/apache2/apache2.conf
 
 RUN a2enmod rewrite
 
