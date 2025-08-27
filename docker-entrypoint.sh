@@ -112,46 +112,20 @@ echo "Starting FarmOS container..."
 # Wait for database
 wait_for_db
 
-# Ensure Drupal directory exists
-if [ ! -d /var/www/html/web/core ]; then
-    echo "Error: /var/www/html/web/core directory not found. Composer install may have failed."
-    echo "Container will continue running for debugging..."
-    echo "Contents of /var/www/html:"
-    ls -la /var/www/html/ || echo "Cannot list Drupal directory"
-else
+# Create Drupal settings if core exists
+if [ -d /var/www/html/web/core ]; then
     echo "Drupal core directory found"
-    
-    # Debug: List contents of Drupal directory
-    echo "Contents of /var/www/html:"
-    ls -la /var/www/html/ || echo "Cannot list Drupal directory"
-
-    # Debug: Check if web directory exists
-    if [ -d /var/www/html/web ]; then
-        echo "Web directory found"
-        ls -la /var/www/html/web/ || echo "Cannot list web directory"
-    else
-        echo "Web directory not found"
-    fi
-
-    # Debug: Check if core directory exists
-    if [ -d /var/www/html/web/core ]; then
-        echo "Drupal core directory found"
-        ls -la /var/www/html/web/core/ || echo "Cannot list core directory"
-    else
-        echo "Drupal core directory not found"
-    fi
-
-    # Create Drupal settings
     create_drupal_settings
-
-    # Install Drupal if needed
     install_drupal
-
-    # Set proper permissions
     chown -R www-data:www-data /var/www/html/web/sites/default/files
+else
+    echo "Drupal core directory not found, but continuing..."
+    echo "Contents of /var/www/html:"
+    ls -la /var/www/html/ || echo "Cannot list directory"
 fi
 
 echo "FarmOS container ready!"
 
-# Execute the main command
-exec "$@"
+# Start Apache in the foreground
+echo "Starting Apache..."
+exec apache2-foreground
